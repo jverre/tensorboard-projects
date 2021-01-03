@@ -1,0 +1,24 @@
+.runs-page {
+    .fixed-widget {
+        position: fixed;
+        right: 20px;
+        top: 15px;
+        z-index: 250;
+    }
+
+    .runs-selector {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 20px;
+
+        span {
+            cursor: pointer;
+        }
+
+        .selected {
+            font-weight: bold;
+        }
+    }
+}

@@ -1,0 +1,35 @@
+@import './colours.scss';
+@import './include-media';
+
+html {
+    height: 100%;
+    width: 100%;
+}
+
+iframe {
+    border: none;
+}
+
+#root {
+    width: 100%;
+    font-family: Barlow, Arial,sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;  /*makes the body non-scrollable (we will add scrolling to the sidebar and main content containers)*/
+    margin: 0px;  /*removes default style*/
+    display: flex;  /*enables flex content for its children*/
+    box-sizing: border-box;
+}
+
+.App {
+    height: 100%;
+    width: 100%;
+    overflow: hidden;  /*makes the body non-scrollable (we will add scrolling to the sidebar and main content containers)*/
+    margin: 0px;  /*removes default style*/
+    position: relative;
+}

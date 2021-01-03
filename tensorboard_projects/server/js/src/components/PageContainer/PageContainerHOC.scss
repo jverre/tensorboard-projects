@@ -1,0 +1,22 @@
+.ant-layout {
+    height: 100%;
+
+    .logo {
+        height: 32px;
+        background: rgba(255, 255, 255, 0.2);
+        margin: 16px;
+    }
+
+    .page-breadcrumb {
+        height: 64px;
+        display: flex;
+        align-items: center;
+        margin-bottom: 2px;
+    }
+
+    .site-layout-background {
+        overflow-y: scroll;
+        height: 100%;
+    }
+}
+

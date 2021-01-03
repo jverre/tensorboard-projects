@@ -1,0 +1,47 @@
+.documentation {
+    height: 100%;
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+
+    .DraftEditor-editorContainer {
+        z-index: 0;
+    }
+
+    button[data-type="AUDIO"] {
+        display: none;
+    }
+
+    button[data-type="VIDEO"] {
+        display: none;
+    }
+
+    button[data-type="EMBED"] {
+        display: none;
+    }
+    
+    .bf-content {
+        height: fit-content;
+    }
+
+    .documentation-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+    }
+
+    .documentation-summary {
+        background-color: #fff;
+    }
+
+    .ant-tabs-nav-add {
+        height: 40px;
+    }
+
+    .documentation-footer {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+    }
+}

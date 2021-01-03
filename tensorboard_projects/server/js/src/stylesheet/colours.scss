@@ -1,0 +1,9 @@
+$white: white;
+$dark: #202233;
+$font-size-content_header: 16px;
+
+:export {
+    white: $white;
+    dark: $dark;
+    font-size-content_header: $font-size-content_header
+}
