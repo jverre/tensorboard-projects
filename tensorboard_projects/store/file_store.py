@@ -43,8 +43,11 @@ class FileStore():
                                               'models/{model_id}/documentation_summary.json'.format(model_id=model_id))
             model_panes_path = os.path.join(self.root_directory,
                                             'models/{model_id}/documentation_panes.json'.format(model_id=model_id))
+            custom_runs_path = os.path.join(self.root_directory,
+                                            'models/{model_id}/custom_runs.json'.format(model_id=model_id))
             json.dump("", open(model_summary_path, 'w'))
             json.dump([], open(model_panes_path, 'w'))
+            json.dump([], open(custom_runs_path, 'w'))
 
         return model_metadata
 

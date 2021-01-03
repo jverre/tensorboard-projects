@@ -23,11 +23,6 @@ def _add_static_prefix(route):
     return route
 
 
-@app.route(_add_static_prefix("/static-files/<path:path>"))
-def serve_static_file(path):
-    return send_from_directory(STATIC_DIR, path)
-
-
 @app.route(_add_static_prefix("/api/models"))
 def get_models():
     models = handlers.get_models()
@@ -129,8 +124,14 @@ def stop_dashboards():
     return response
 
 
-@app.route(_add_static_prefix("/"))
-def serve():
+@app.route(_add_static_prefix("/static-files/<path:path>"))
+def serve_static_file(path):
+    return send_from_directory(STATIC_DIR, path)
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
     if os.path.exists(os.path.join(STATIC_DIR, "index.html")):
         return send_from_directory(STATIC_DIR, "index.html")
 
