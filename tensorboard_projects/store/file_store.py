@@ -27,17 +27,19 @@ class FileStore():
 
     def create_or_update_model(self, model_id, model_metadata):
         model_metadata_path = os.path.join(self.root_directory, 'models/{model_id}/metadata.json'.format(model_id=model_id))
+        model_metadata['model_id'] = model_id
         model_metadata = create_model_metadata(model_metadata)
-
         if not os.path.exists(os.path.dirname(model_metadata_path)):
             os.makedirs(os.path.dirname(model_metadata_path))
 
         if os.path.exists(model_metadata_path):
             # Update model
-            json.dump(model_metadata, open(model_metadata_path, 'w'))
+            with open(model_metadata_path, 'w') as d:
+                json.dump(model_metadata, d)
         else:
             # Create model
-            json.dump(model_metadata, open(model_metadata_path, 'w'))
+            with open(model_metadata_path, 'w') as f:
+                json.dump(model_metadata, f)
 
             model_summary_path = os.path.join(self.root_directory,
                                               'models/{model_id}/documentation_summary.json'.format(model_id=model_id))
@@ -45,9 +47,12 @@ class FileStore():
                                             'models/{model_id}/documentation_panes.json'.format(model_id=model_id))
             custom_runs_path = os.path.join(self.root_directory,
                                             'models/{model_id}/custom_runs.json'.format(model_id=model_id))
-            json.dump("", open(model_summary_path, 'w'))
-            json.dump([], open(model_panes_path, 'w'))
-            json.dump([], open(custom_runs_path, 'w'))
+            with open(model_summary_path, 'w') as f:
+                json.dump("", f)
+            with open(model_panes_path, 'w') as f:
+                json.dump([], f)
+            with open(custom_runs_path, 'w') as f:
+                json.dump([], f)
 
         return model_metadata
 
@@ -96,19 +101,27 @@ class FileStore():
 
         model_runs = []
         for path in model_path.split(","):
-            root_path = path.split('{model_version}')[0]
+            if '{model_version}' in path:
+                root_path = path.split('{model_version}')[0]
 
-            if os.path.exists(root_path):
-                for model_version in os.listdir(root_path):
-                    version_path = path.format(model_version=model_version)
-                    model_runs += self._get_runs_tensorboard(version_path,
+                if os.path.exists(root_path):
+                    for model_version in os.listdir(root_path):
+                        version_path = path.format(model_version=model_version)
+                        model_runs += self._get_runs_tensorboard(version_path,
+                                                                 model_name=model_name,
+                                                                 model_version=model_version)
+            else:
+                root_path = path
+                if os.path.exists(path):
+                    model_runs += self._get_runs_tensorboard(path,
                                                              model_name=model_name,
-                                                             model_version=model_version)
+                                                             model_version='')
 
         # Get runs
         custom_runs_path = os.path.join(self.root_directory,
                                         'models/{model_id}/custom_runs.json'.format(model_id=model_id))
-        custom_runs_list = json.load(open(custom_runs_path, 'r'))
+        with open(custom_runs_path, 'r') as f:
+            custom_runs_list = json.load(f)
         custom_runs = {x['path']: x for x in custom_runs_list}
 
         updated_model_runs = []
@@ -154,7 +167,8 @@ class FileStore():
         custom_runs_path = os.path.join(self.root_directory, 'models/{model_id}/custom_runs.json'.format(model_id=model_id))
 
         if os.path.exists(custom_runs_path):
-            custom_runs = json.load(open(custom_runs_path, 'r'))
+            with open(custom_runs_path, 'r') as f:
+                custom_runs = json.load(f)
         else:
             custom_runs = []
 
@@ -164,14 +178,16 @@ class FileStore():
 
         # Add new edited
         custom_runs += runs
-        json.dump(custom_runs, open(custom_runs_path, 'w'))
+        with open(custom_runs_path, 'w') as f:
+            json.dump(custom_runs, f)
 
         return runs
 
     def get_model_metadata(self, model_id):
         model_metadata_path = os.path.join(self.root_directory,
                                            'models/{model_id}/metadata.json'.format(model_id=model_id))
-        model_metadata = json.load(open(model_metadata_path, 'r'))
+        with open(model_metadata_path, 'r') as f:
+            model_metadata = json.load(f)
 
         return model_metadata
 
@@ -182,10 +198,12 @@ class FileStore():
                                                 'models/{model_id}/documentation_panes.json'.format(model_id=model_id))
         documentation_metadata = os.path.join(self.root_directory,
                                               'models/{model_id}/metadata.json'.format(model_id=model_id))
-
-        documentation_summary = json.load(open(documentation_summary_path, 'r'))
-        documentation_panes = json.load(open(documentation_panes_path, 'r'))
-        documentation_metadata = json.load(open(documentation_metadata, 'r'))
+        with open(documentation_summary_path, 'r') as f:
+            documentation_summary = json.load(f)
+        with open(documentation_panes_path, 'r') as f:
+            documentation_panes = json.load(f)
+        with open(documentation_metadata, 'r') as f:
+            documentation_metadata = json.load(f)
 
         model_documentation = {
                 'documentation_summary': documentation_summary,
@@ -204,6 +222,8 @@ class FileStore():
         documentation_panes_path = os.path.join(self.root_directory,
                                                 'models/{model_id}/documentation_panes.json'.format(model_id=model_id))
 
-        json.dump(documentation_summary, open(documentation_summary_path, 'w'))
-        json.dump(documentation_panes, open(documentation_panes_path, 'w'))
+        with open(documentation_summary_path, 'w') as f:
+            json.dump(documentation_summary, f)
+        with open(documentation_panes_path, 'w') as f:
+            json.dump(documentation_panes, f)
         return documentation
