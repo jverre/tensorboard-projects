@@ -1,4 +1,14 @@
-# Tensorboard Projects
+<div align="center">
+
+# TensorBoard Projects
+
+
 **Management UI for Tensorboard Dashboards**
 
-UI for managing Tensorbord dashboards.
+[![GitHub license](https://img.shields.io/github/license/jverre/tensorboard-projects)](https://img.shields.io/github/license/jverre/tensorboard-projects)
+
+</div>
+
+---
+
+This project is still in development
