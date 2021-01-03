@@ -146,7 +146,7 @@ class FileStore():
 
         return deleted_runs
 
-    def edit_runs(self, model_id: str, runs):
+    def edit_runs(self, model_id, runs):
         # Create custom runs
         custom_runs_path = os.path.join(self.root_directory, 'models/{model_id}/custom_runs.json'.format(model_id=model_id))
 
