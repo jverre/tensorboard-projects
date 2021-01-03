@@ -19,7 +19,7 @@ def package_files(directory):
 js_files = package_files("tensorboard_projects/server/js/build")
 
 setup(
-    name="multi-tensorboard",
+    name="tensorboard-projects",
     version=version,
     packages=find_packages(),
     package_data={"tensorboard_projects": js_files},

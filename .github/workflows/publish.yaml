@@ -9,18 +9,26 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
+    - uses: actions/setup-node@v1
       with:
-        python-version: '3.x'
-    - name: Install dependencies
+        node-version: "12"
+    - uses: actions/setup-python@v2
+      with:
+        python-version: "3.7"
+
+    - name: Build UI
+      working-directory: tensorboard_projects/server/js
       run: |
-        python -m pip install --upgrade pip
-        pip install setuptools wheel twine
-    - name: Build and publish
+        npm install
+        npm run build
+    - name: Build wheel
+      id: build-wheel
+      run: |
+        pip install wheel
+        python setup.py bdist_wheel --universal
+    - name: Publish wheel
       env:
         TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
         TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
       run: |
-        python setup.py sdist bdist_wheel --universal
         twine upload dist/*
