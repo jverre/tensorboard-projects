@@ -17,10 +17,6 @@ const mapStateToProps = state => {
 };
 
 class DashboardList extends Component {
-    constructor(props) {
-        super(props);
-    }
-
     componentDidMount() {
         const payload = {
             params: {}

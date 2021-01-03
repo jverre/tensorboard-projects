@@ -74,9 +74,9 @@ class RunDetails extends Component {
                         </Button>
                     </Form.Item>
                 )
-
-                return
             }
+
+            return null
         })
 
         Object.keys(runDetails).map(fieldName => {
@@ -93,8 +93,8 @@ class RunDetails extends Component {
                         </Button>
                     </Form.Item>
                 )
-                return
             }
+            return null
         })
 
         return fields

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Layout, Breadcrumb, Button } from 'antd';
+import { Breadcrumb, Button } from 'antd';
 import { connect } from "react-redux";
 //import { redirect } from '../../lib/util/navigation';
 import BraftEditor from 'braft-editor';

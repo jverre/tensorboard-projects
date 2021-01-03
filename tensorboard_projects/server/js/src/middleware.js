@@ -10,7 +10,7 @@ const middlewares = {
   ...Tensorboard,
 };
 
-export default (store, next, action) => {
+const midleware = (store, next, action) => {
   let middleware = middlewares[action.type];
 
   if (middleware) {
@@ -23,3 +23,5 @@ export default (store, next, action) => {
   
   next(action);
 };
+
+export default midleware;

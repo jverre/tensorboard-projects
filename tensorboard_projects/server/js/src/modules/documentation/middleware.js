@@ -27,7 +27,7 @@ export async function post_model_documentation(action) {
     return res.data
 }
 
-export default {
+const documentationMiddleware = {
     "[DOCUMENTATION] GET_DOCUMENTATION__SUBMIT": async (store, next, action) => {
         try {
             const result = await get_model_documentation(action)
@@ -45,3 +45,5 @@ export default {
         }
     }
 }
+
+export default documentationMiddleware;

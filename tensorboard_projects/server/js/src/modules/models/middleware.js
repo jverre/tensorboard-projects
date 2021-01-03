@@ -32,7 +32,7 @@ export async function delete_model(action) {
     return res.data
 }
 
-export default {
+const modelsMiddleware = {
     "[MODELS] GET_MODELS__SUBMIT": async (store, next, action) => {
         try {
             const result = await get_models(action)
@@ -58,3 +58,5 @@ export default {
         }
     }
 }
+
+export default modelsMiddleware;

@@ -52,7 +52,7 @@ export async function edit_runs(action) {
     return res.data
 }
 
-export default {
+const runsMiddleware = {
     "[RUNS] GET_RUNS__SUBMIT": async (store, next, action) => {
         try {
             const result = await get_runs(action)
@@ -95,3 +95,5 @@ export default {
         }
     }
 }
+
+export default runsMiddleware;

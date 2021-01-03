@@ -31,7 +31,7 @@ export async function stop_dashboard(action) {
     return res.data
 }
 
-export default {
+const dashboardMiddleware = {
     "[DASHBOARD] GET_DASHBOARDS__SUBMIT": async (store, next, action) => {
         try {
             const result = await get_dashboards(action)
@@ -60,3 +60,5 @@ export default {
         }
     }
 }
+
+export default dashboardMiddleware;

@@ -270,7 +270,7 @@ class Runs extends Component {
                 <div className='runs-selector'>
                     <span onClick={() => this.onClickRunType(false)} className={this.state.archivedRuns ? '' : 'selected'}>Active Runs</span>
                     <Divider type="vertical" />
-                    <span className='' onClick={() => this.onClickRunType(true)} className={this.state.archivedRuns ? 'selected' : ''}>Archived Runs</span>
+                    <span onClick={() => this.onClickRunType(true)} className={this.state.archivedRuns ? 'selected' : ''}>Archived Runs</span>
                 </div>
                 <div className="site-layout-content">
                     <div  className="fixed-widget">
