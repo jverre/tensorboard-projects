@@ -26,6 +26,7 @@ setup(
     install_requires=[
         "click>=7.0"
         "Flask",
+        "flask-cors",
         "gunicorn",
         "tensorboard"
     ],

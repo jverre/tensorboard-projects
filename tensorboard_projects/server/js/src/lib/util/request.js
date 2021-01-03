@@ -1,5 +1,6 @@
 import axios from "axios";
 import {API_CONSTANT_MAP, API_CANCEL_TOKENS} from './../data_management/api_endpoints';
+import { getApiUrl } from "./config";
 
 export async function get(path, params) {
     const payload = params ? {params} : null;
@@ -23,7 +24,16 @@ export async function request(path, method, payload) {
     var pathUrl = apiConstant.url(path['params'])
     
     // Create url
-    const url = pathUrl;
+    let url = getApiUrl();
+    
+    if (!url.endsWith('/')) {
+        url += '/';
+    }
+    
+    if (pathUrl.startsWith('/')) {
+        pathUrl = pathUrl.substr(1);
+    }
+    url += pathUrl;
 
     // Build request
     let computedConfig = {

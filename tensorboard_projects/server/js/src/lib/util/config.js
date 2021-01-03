@@ -17,10 +17,10 @@ export const getBasePath = () => {
 }
 
 export const getApiUrl = () => {
-    const val = window._env ? window._env["REACT_APP_API_URL"] : "http://localhost:5000/";
+    const val = window.API_URL;
 
     if (!val) {
-        throw new Error('REACT_APP_API_URL is not set')
+        throw new Error('REACT_APP_TENSORBOARD_PROJECTS_PROXY is not set')
     } else {
         return val
     }

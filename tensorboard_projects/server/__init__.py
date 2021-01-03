@@ -1,9 +1,11 @@
 import os
+import json
 import shlex
 import textwrap
 import logging
 
 from flask import Flask, request, send_from_directory, Response, make_response, jsonify
+from flask_cors import CORS
 
 from tensorboard_projects.utils.process import exec_cmd
 import tensorboard_projects.server.handlers as handlers
@@ -13,6 +15,7 @@ logging.basicConfig(level=logging.INFO)
 REL_STATIC_DIR = "js/build"
 
 app = Flask(__name__, static_folder=REL_STATIC_DIR)
+CORS(app)
 STATIC_DIR = os.path.join(app.root_path, REL_STATIC_DIR)
 
 STATIC_PREFIX_ENV_VAR = "_TENSORBOARD_PROJECTS_STATIC_PREFIX"
@@ -140,14 +143,16 @@ def stop_dashboards():
 
 @app.route(_add_static_prefix("/static-files/<path:path>"))
 def serve_static_file(path):
-    return send_from_directory(STATIC_DIR, path)
+    page = send_from_directory(STATIC_DIR, path)
+    return page
 
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
     if os.path.exists(os.path.join(STATIC_DIR, "index.html")):
-        return send_from_directory(STATIC_DIR, "index.html")
+        page = send_from_directory(STATIC_DIR, "index.html")
+        return page
 
     text = textwrap.dedent(
         """
@@ -181,6 +186,11 @@ def _run_server(
 
     if proxy_host:
         env_map[PROXY_URI_ENV_VAR] = proxy_host
+
+    # ToDo: Fix this
+    # In order for the proxy host to be used, we create a new env.js file in the STATIC_DIR folder
+    with open(os.path.join(STATIC_DIR, 'env.js'), 'w') as f:
+        f.write("window.API_URL = '{}';".format(proxy_host))
 
     full_command = _build_gunicorn_command(gunicorn_opts, host, port, workers or 4)
     exec_cmd(full_command, env=env_map, stream_output=True)

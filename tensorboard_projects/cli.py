@@ -18,8 +18,17 @@ def cli():
 )
 @cli_args.PORT
 @cli_args.HOST
-def ui(port, host, backend_store_uri):
-
+@cli_args.PROXY_HOST
+def ui(port, host, backend_store_uri, proxy_host):
+    if proxy_host == '':
+        if host.startswith('http'):
+            proxy_host = '{host}:{port}'.format(host=host, port=port)
+        else:
+            proxy_host = 'http://{host}:{port}'.format(host=host, port=port)
+    else:
+        if not proxy_host.startswith('http'):
+            proxy_host = 'http://{proxy_host}'.format(proxy_host=proxy_host)
+    
     # Initialise store
     handlers.initialize_store(backend_store_uri)
-    _run_server(file_store_path=backend_store_uri, host=host, port=port, workers=1)
+    _run_server(file_store_path=backend_store_uri, host=host, port=port, proxy_host=proxy_host, workers=1)

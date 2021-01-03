@@ -11,3 +11,9 @@ HOST = click.option(
 )
 
 PORT = click.option("--port", "-p", default=5000, help="The port to listen on (default: 5000).")
+
+PROXY_HOST = click.option(
+    "--proxy_host",
+    "-proxy",
+    default='',
+    help="The network address to send API requests from UI to (default: HOST:PORT).")
