@@ -1,5 +1,4 @@
 import os
-import json
 import shlex
 import textwrap
 import logging
@@ -10,7 +9,8 @@ from flask_cors import CORS
 from tensorboard_projects.utils.process import exec_cmd
 import tensorboard_projects.server.handlers as handlers
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig()
+logger = logging.getLogger(__name__).setLevel(logging.INFO)
 
 REL_STATIC_DIR = "js/build"
 
@@ -32,7 +32,7 @@ def _add_static_prefix(route):
 
 @app.route(_add_static_prefix("/api/models"))
 def get_models():
-    logging.info('API call: GET /api/models - Get models')
+    logger.info('API call: GET /api/models - Get models')
     models = handlers.get_models()
     response = make_response(jsonify(models))
 
@@ -41,7 +41,7 @@ def get_models():
 
 @app.route(_add_static_prefix("/api/model/<model_id>"), methods=['POST'])
 def update_model(model_id):
-    logging.info('API call: POST /api/models/<model_id> - Create or Update model')
+    logger.info('API call: POST /api/models/<model_id> - Create or Update model')
     model_metadata = request.get_json()
 
     model_metadata = handlers.create_or_update_model(model_id, model_metadata)
@@ -52,7 +52,7 @@ def update_model(model_id):
 
 @app.route(_add_static_prefix("/api/model/<model_id>"), methods=['DELETE'])
 def delete_model(model_id):
-    logging.info('API call: DELETE /api/models/<model_id> - Delete model')
+    logger.info('API call: DELETE /api/models/<model_id> - Delete model')
     handlers.delete_model(model_id)
     response = make_response(jsonify({'model_id': model_id}))
 
@@ -61,7 +61,7 @@ def delete_model(model_id):
 
 @app.route(_add_static_prefix("/api/model/<model_id>/runs"), methods=['GET'])
 def get_runs(model_id):
-    logging.info('API call: GET /api/model/<model_id>/runs - Get model runs')
+    logger.info('API call: GET /api/model/<model_id>/runs - Get model runs')
     model_runs = handlers.get_model_runs(model_id)
     response = make_response(jsonify(model_runs))
 
@@ -70,7 +70,7 @@ def get_runs(model_id):
 
 @app.route(_add_static_prefix("/api/model/<model_id>/runs"), methods=['POST'])
 def edit_runs(model_id):
-    logging.info('API call: POST /api/model/<model_id>/runs - Update model runs')
+    logger.info('API call: POST /api/model/<model_id>/runs - Update model runs')
     payload = request.get_json()
 
     if payload['action'] == 'archive':
@@ -96,14 +96,14 @@ def edit_runs(model_id):
 
 @app.route(_add_static_prefix("/api/model/<model_id>/documentation"), methods=['GET'])
 def get_documentation(model_id):
-    logging.info('API call: GET /api/model/<model_id>/documentatin - GET model documentation')
+    logger.info('API call: GET /api/model/<model_id>/documentatin - GET model documentation')
     documentation = handlers.get_documentation(model_id)
     return make_response(jsonify(documentation))
 
 
 @app.route(_add_static_prefix("/api/model/<model_id>/documentation"), methods=['POST'])
 def update_documentation(model_id):
-    logging.info('API call: POST /api/model/<model_id>/documentation - Update model documentation')
+    logger.info('API call: POST /api/model/<model_id>/documentation - Update model documentation')
     documentation = request.get_json()
     handlers.update_documentation(model_id=model_id,
                                   documentation=documentation)
@@ -112,7 +112,7 @@ def update_documentation(model_id):
 
 @app.route(_add_static_prefix("/api/dashboards"), methods=['GET'])
 def get_dashboards():
-    logging.info('API call: GET /api/dashboards - Update active dashboards')
+    logger.info('API call: GET /api/dashboards - Update active dashboards')
     active_dashboards = handlers.get_dashboards()
     response = make_response(jsonify(active_dashboards))
     return response
@@ -120,7 +120,7 @@ def get_dashboards():
 
 @app.route(_add_static_prefix("/api/dashboards"), methods=['POST'])
 def start_dashboards():
-    logging.info('API call: POST /api/dashboards - Start dashboard')
+    logger.info('API call: POST /api/dashboards - Start dashboard')
     payload = request.get_json()
     runs = payload['runs']
     model_id = payload['model_id']
@@ -133,7 +133,7 @@ def start_dashboards():
 
 @app.route(_add_static_prefix("/api/dashboards"), methods=['DELETE'])
 def stop_dashboards():
-    logging.info('API call: DELETE /api/dashboards - Stop dashboard')
+    logger.info('API call: DELETE /api/dashboards - Stop dashboard')
     dashboard_id = request.args.get('dashboardId')
     dashboard_data = handlers.stop_tensorboard_dashboard(dashboard_id=dashboard_id)
 

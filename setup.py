@@ -4,7 +4,7 @@ from importlib.machinery import SourceFileLoader
 
 version = (
     SourceFileLoader("tensorboard_projects.version",
-                     os.path.join("tensorboard_projects", "version.py")).load_module().VERSION
+                     os.path.join("tensorboard_projects", "version.py")).load_module().__version__
 )
 
 

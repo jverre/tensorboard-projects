@@ -28,7 +28,7 @@ def ui(port, host, backend_store_uri, proxy_host):
     else:
         if not proxy_host.startswith('http'):
             proxy_host = 'http://{proxy_host}'.format(proxy_host=proxy_host)
-    
+
     # Initialise store
     handlers.initialize_store(backend_store_uri)
     _run_server(file_store_path=backend_store_uri, host=host, port=port, proxy_host=proxy_host, workers=1)
