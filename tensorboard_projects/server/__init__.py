@@ -10,7 +10,8 @@ from tensorboard_projects.utils.process import exec_cmd
 import tensorboard_projects.server.handlers as handlers
 
 logging.basicConfig()
-logger = logging.getLogger(__name__).setLevel(logging.INFO)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.INFO)
 
 REL_STATIC_DIR = "js/build"
 

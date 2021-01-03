@@ -138,7 +138,7 @@ class Runs extends Component {
             payload: {
                 runs: this.state.selectedRows.map(x => {return {
                     'path': x.path,
-                    'name': x.model_version + '/' + x.run_id
+                    'name': x.model_version !== '' ? x.model_version + '/' + x.run_id : x.run_id
                 }}),
                 model_id: modelId
             }
