@@ -24,8 +24,9 @@ setup(
     packages=find_packages(),
     package_data={"tensorboard_projects": js_files},
     install_requires=[
-        "gunicorn",
+        "click>=7.0"
         "Flask",
+        "gunicorn",
         "tensorboard"
     ],
     entry_points="""
