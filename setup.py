@@ -33,5 +33,5 @@ setup(
     tensorboard-projects=tensorboard_projects.cli:cli
     """,
     description="Tensorboard Projects: A multi project UI for Tensorboard",
-    python_requires=">=3.5"
+    python_requires=">=2.7,!= 3.0.*,!= 3.1.*"
 )

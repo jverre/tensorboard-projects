@@ -3,23 +3,20 @@ import json
 import glob
 import shutil
 from tensorboard_projects.types.initialization import create_model_metadata
-from typing import List
 
 from tensorboard.backend.event_processing import directory_loader
 from tensorboard.backend.event_processing import event_file_loader
 from tensorboard.backend.event_processing import io_wrapper
 from tensorboard.uploader import logdir_loader
 
-from tensorboard_projects.types import ModelDocumentation, ModelMetadata
-
 
 class FileStore():
-    def __init__(self, root_directory: str):
+    def __init__(self, root_directory):
         if root_directory is None:
             raise ValueError('root_directory cannot be None')
         self.root_directory = os.path.expanduser(root_directory)
 
-    def get_models(self) -> List[ModelMetadata]:
+    def get_models(self):
         models_path = os.path.join(self.root_directory, 'models', '*')
 
         models = []
@@ -28,8 +25,8 @@ class FileStore():
             models += [self.get_model_metadata(model_id)]
         return models
 
-    def create_or_update_model(self, model_id: str, model_metadata: ModelMetadata):
-        model_metadata_path = os.path.join(self.root_directory, f'models/{model_id}/metadata.json')
+    def create_or_update_model(self, model_id, model_metadata):
+        model_metadata_path = os.path.join(self.root_directory, 'models/{model_id}/metadata.json'.format(model_id=model_id))
         model_metadata = create_model_metadata(model_metadata)
 
         if not os.path.exists(os.path.dirname(model_metadata_path)):
@@ -42,15 +39,17 @@ class FileStore():
             # Create model
             json.dump(model_metadata, open(model_metadata_path, 'w'))
 
-            model_summary_path = os.path.join(self.root_directory, f'models/{model_id}/documentation_summary.json')
-            model_panes_path = os.path.join(self.root_directory, f'models/{model_id}/documentation_panes.json')
+            model_summary_path = os.path.join(self.root_directory,
+                                              'models/{model_id}/documentation_summary.json'.format(model_id=model_id))
+            model_panes_path = os.path.join(self.root_directory,
+                                            'models/{model_id}/documentation_panes.json'.format(model_id=model_id))
             json.dump("", open(model_summary_path, 'w'))
             json.dump([], open(model_panes_path, 'w'))
 
         return model_metadata
 
-    def delete_model(self, model_id: str):
-        model_path = os.path.join(self.root_directory, f'models/{model_id}')
+    def delete_model(self, model_id):
+        model_path = os.path.join(self.root_directory, 'models/{model_id}'.format(model_id=model_id))
         shutil.rmtree(model_path)
 
     def _get_runs_tensorboard(self, path, model_name=None, model_version=None):
@@ -85,7 +84,7 @@ class FileStore():
 
         return runs
 
-    def get_model_runs(self, model_id: str):
+    def get_model_runs(self, model_id):
         model_metadata = self.get_model_metadata(model_id)
 
         # Model path - Split by comma and replace {model_version}
@@ -104,7 +103,8 @@ class FileStore():
                                                              model_version=model_version)
 
         # Get runs
-        custom_runs_path = os.path.join(self.root_directory, f'models/{model_id}/custom_runs.json')
+        custom_runs_path = os.path.join(self.root_directory,
+                                        'models/{model_id}/custom_runs.json'.format(model_id=model_id))
         custom_runs_list = json.load(open(custom_runs_path, 'r'))
         custom_runs = {x['path']: x for x in custom_runs_list}
 
@@ -122,21 +122,21 @@ class FileStore():
 
         return updated_model_runs
 
-    def archive_runs(self, model_id: str, runs: List):
+    def archive_runs(self, model_id, runs):
         model_metadata = self.get_model_metadata(model_id)
 
         model_metadata['archived_runs'] = list(set(model_metadata['archived_runs'] + [x['path'] for x in runs]))
         new_model_metadata = self.create_or_update_model(model_id, model_metadata)
         return new_model_metadata['archived_runs']
 
-    def unarchive_runs(self, model_id: str, runs: List):
+    def unarchive_runs(self, model_id, runs):
         model_metadata = self.get_model_metadata(model_id)
 
         model_metadata['archived_runs'] = [x for x in model_metadata['archived_runs'] if x not in [y['path'] for y in runs]]
         new_model_metadata = self.create_or_update_model(model_id, model_metadata)
         return new_model_metadata['archived_runs']
 
-    def delete_runs(self, model_id: str, runs: List):
+    def delete_runs(self, model_id, runs):
         deleted_runs = []
 
         for run in runs:
@@ -146,9 +146,9 @@ class FileStore():
 
         return deleted_runs
 
-    def edit_runs(self, model_id: str, runs: List):
+    def edit_runs(self, model_id: str, runs):
         # Create custom runs
-        custom_runs_path = os.path.join(self.root_directory, f'models/{model_id}/custom_runs.json')
+        custom_runs_path = os.path.join(self.root_directory, 'models/{model_id}/custom_runs.json'.format(model_id=model_id))
 
         if os.path.exists(custom_runs_path):
             custom_runs = json.load(open(custom_runs_path, 'r'))
@@ -166,15 +166,19 @@ class FileStore():
         return runs
 
     def get_model_metadata(self, model_id):
-        model_metadata_path = os.path.join(self.root_directory, f'models/{model_id}/metadata.json')
+        model_metadata_path = os.path.join(self.root_directory,
+                                           'models/{model_id}/metadata.json'.format(model_id=model_id))
         model_metadata = json.load(open(model_metadata_path, 'r'))
 
         return model_metadata
 
-    def get_model_documentation(self, model_id: str) -> ModelDocumentation:
-        documentation_summary_path = os.path.join(self.root_directory, f'models/{model_id}/documentation_summary.json')
-        documentation_panes_path = os.path.join(self.root_directory, f'models/{model_id}/documentation_panes.json')
-        documentation_metadata = os.path.join(self.root_directory, f'models/{model_id}/metadata.json')
+    def get_model_documentation(self, model_id):
+        documentation_summary_path = os.path.join(self.root_directory,
+                                                  'models/{model_id}/documentation_summary.json'.format(model_id=model_id))
+        documentation_panes_path = os.path.join(self.root_directory,
+                                                'models/{model_id}/documentation_panes.json'.format(model_id=model_id))
+        documentation_metadata = os.path.join(self.root_directory,
+                                              'models/{model_id}/metadata.json'.format(model_id=model_id))
 
         documentation_summary = json.load(open(documentation_summary_path, 'r'))
         documentation_panes = json.load(open(documentation_panes_path, 'r'))
@@ -188,12 +192,14 @@ class FileStore():
 
         return model_documentation
 
-    def update_documentation(self, model_id: str, documentation: ModelDocumentation) -> ModelDocumentation:
+    def update_documentation(self, model_id, documentation):
         documentation_summary = documentation['documentation_summary']
         documentation_panes = documentation['documentation_panes']
 
-        documentation_summary_path = os.path.join(self.root_directory, f'models/{model_id}/documentation_summary.json')
-        documentation_panes_path = os.path.join(self.root_directory, f'models/{model_id}/documentation_panes.json')
+        documentation_summary_path = os.path.join(self.root_directory,
+                                                  'models/{model_id}/documentation_summary.json'.format(model_id=model_id))
+        documentation_panes_path = os.path.join(self.root_directory,
+                                                'models/{model_id}/documentation_panes.json'.format(model_id=model_id))
 
         json.dump(documentation_summary, open(documentation_summary_path, 'w'))
         json.dump(documentation_panes, open(documentation_panes_path, 'w'))

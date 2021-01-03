@@ -2,16 +2,13 @@ import os
 import uuid
 import time
 import signal
-from typing import Dict, List
 
 from tensorboard.compat.tensorflow_stub.io import gfile
 from tensorboard import manager
 
-from tensorboard_projects.types.schema import DashboardMetadata
-
 
 class TensorBoardDashboard():
-    def __init__(self, root_directory: str, runs: List[Dict]) -> None:
+    def __init__(self, root_directory, runs):
         super().__init__()
         if root_directory is None:
             raise ValueError('root_directory cannot be None')
@@ -35,14 +32,14 @@ class TensorBoardDashboard():
 
                 os.symlink(run_path, os.path.join(self.dest_path, run_name), target_is_directory=True)
 
-    def start(self, model_id) -> DashboardMetadata:
+    def start(self, model_id):
         self._create_symlink_dir()
 
         parsed_args = ["--logdir", self.dest_path,
                        "--reload_multifile", "true"]
         start_result = manager.start(parsed_args)
 
-        path = f'http://localhost:{start_result.info.port}'
+        path = 'http://localhost:{port}'.format(port=start_result.info.port)
         return {
             'model_id': model_id,
             'path': path,

@@ -1,15 +1,13 @@
 import os
 from tensorboard_projects.dashboard.tensorboard import stop_dashboard
 from tensorboard_projects.dashboard.tensorboard import TensorBoardDashboard
-from tensorboard_projects.types.schema import ModelDocumentation, ModelMetadata
 from tensorboard_projects.store.file_store import FileStore
-from typing import List, Dict
 
 _store = None
 _active_dashboards = {}
 
 
-def _get_store(backend_store_uri: str = None) -> FileStore:
+def _get_store(backend_store_uri=None):
     from tensorboard_projects.server import BACKEND_STORE_URI_ENV_VAR
     global _store
 
@@ -20,12 +18,12 @@ def _get_store(backend_store_uri: str = None) -> FileStore:
     return _store
 
 
-def initialize_store(backend_store_uri: str) -> None:
+def initialize_store(backend_store_uri):
     # Initialise store
     _get_store(backend_store_uri)
 
 
-def get_models() -> List[ModelMetadata]:
+def get_models():
     store = _get_store()
     return store.get_models()
 
@@ -55,17 +53,17 @@ def edit_runs(model_id, runs):
     return store.edit_runs(model_id, runs)
 
 
-def create_or_update_model(model_id: str, model_metadata: ModelMetadata) -> ModelMetadata:
+def create_or_update_model(model_id, model_metadata):
     store = _get_store()
     return store.create_or_update_model(model_id, model_metadata)
 
 
-def delete_model(model_id: str) -> Dict:
+def delete_model(model_id):
     store = _get_store()
     return store.delete_model(model_id)
 
 
-def get_documentation(model_id: str) -> ModelDocumentation:
+def get_documentation(model_id):
     store = _get_store()
 
     return store.get_model_documentation(model_id)
