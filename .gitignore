@@ -10,4 +10,4 @@ node_modules
 dist/
 
 /build
-!/tensorboard_projects/server/js/build
+#!*/tensorboard_projects/server/js/build
