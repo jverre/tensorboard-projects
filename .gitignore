@@ -8,3 +8,6 @@ node_modules
 .eslintcache
 
 dist/
+
+/build
+!/tensorboard_projects/server/js/build
