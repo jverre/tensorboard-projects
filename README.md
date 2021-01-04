@@ -27,8 +27,6 @@ TensorBoard Projects provides a UI to manage Tensorboard runs and allows you to 
 
 As the project is still very much in development, please report any issues or features you would like to see added !
 
-![Demo](docs/tensorboard_projects_demo.gif)
-
 ## What TensorBoard Projects isn't
 **TensorBoard projects is not an experiment tracking solution**, it simply allows you to better manage TensorBoard runs.
 
