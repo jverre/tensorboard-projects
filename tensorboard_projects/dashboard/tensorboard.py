@@ -27,10 +27,10 @@ class TensorBoardDashboard():
             for run in self.runs:
                 run_path = run['path']
                 run_name = run['name']
-                
+
                 if not gfile.exists(os.path.dirname(os.path.join(self.dest_path, run_name))):
                     gfile.makedirs(os.path.dirname(os.path.join(self.dest_path, run_name)))
-                
+
                 os.symlink(run_path, os.path.join(self.dest_path, run_name), target_is_directory=True)
 
     def start(self, model_id):
