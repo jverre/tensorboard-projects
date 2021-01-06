@@ -1,4 +1,5 @@
 import os
+from tensorboard_projects import server
 import uuid
 import time
 import signal
@@ -34,12 +35,13 @@ class TensorBoardDashboard():
 
     def start(self, model_id):
         self._create_symlink_dir()
+        proxy_host = os.environ[server.PROXY_URI_ENV_VAR]
 
         parsed_args = ["--logdir", self.dest_path,
                        "--reload_multifile", "true"]
         start_result = manager.start(parsed_args)
 
-        path = 'http://localhost:{port}'.format(port=start_result.info.port)
+        path = '{proxy_host}:{port}'.format(proxy_host=proxy_host, port=start_result.info.port)
         return {
             'model_id': model_id,
             'path': path,
