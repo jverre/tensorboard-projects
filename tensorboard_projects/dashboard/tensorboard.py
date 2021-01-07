@@ -2,7 +2,6 @@ import os
 import uuid
 import time
 import signal
-from urllib.parse import urlparse, urlunsplit
 
 from tensorboard.compat.tensorflow_stub.io import gfile
 from tensorboard import manager
