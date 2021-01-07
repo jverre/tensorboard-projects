@@ -1,11 +1,12 @@
 import os
-from tensorboard_projects import server
 import uuid
 import time
 import signal
+from urllib.parse import urlparse
 
 from tensorboard.compat.tensorflow_stub.io import gfile
 from tensorboard import manager
+from tensorboard_projects import server
 
 
 class TensorBoardDashboard():
@@ -42,7 +43,7 @@ class TensorBoardDashboard():
                        "--bind_all"]
         start_result = manager.start(parsed_args)
         
-        dashboard_host = proxy_host.split(':')[0]
+        dashboard_host = proxy_host
         path = '{dashboard_host}:{port}'.format(dashboard_host=dashboard_host, port=start_result.info.port)
         return {
             'model_id': model_id,
