@@ -191,7 +191,7 @@ def _run_server(
     # ToDo: Fix this
     # In order for the proxy host to be used, we create a new env.js file in the STATIC_DIR folder
     with open(os.path.join(STATIC_DIR, 'env.js'), 'w') as f:
-        f.write("window.API_URL = '{proxy_host}:{port}';".format(proxy_host=proxy_host, port=port))
+        f.write("window.API_URL = '{proxy_host}';".format(proxy_host=proxy_host))
 
     full_command = _build_gunicorn_command(gunicorn_opts, host, port, workers or 4)
     exec_cmd(full_command, env=env_map, stream_output=True)
