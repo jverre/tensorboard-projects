@@ -1,11 +1,11 @@
 import os
-from tensorboard_projects import server
 import uuid
 import time
 import signal
 
 from tensorboard.compat.tensorflow_stub.io import gfile
 from tensorboard import manager
+from tensorboard_projects import server
 
 
 class TensorBoardDashboard():
@@ -38,10 +38,17 @@ class TensorBoardDashboard():
         proxy_host = os.environ[server.PROXY_URI_ENV_VAR]
 
         parsed_args = ["--logdir", self.dest_path,
-                       "--reload_multifile", "true"]
+                       "--reload_multifile", "true",
+                       "--bind_all"]
         start_result = manager.start(parsed_args)
-
-        path = '{proxy_host}:{port}'.format(proxy_host=proxy_host, port=start_result.info.port)
+        
+        split_proxy_host = proxy_host.split(':')
+        if split_proxy_host[-1].isnumeric():
+            dashboard_host = ':'.join(split_proxy_host[:-1])
+        else:
+            dashboard_host = proxy_host
+    
+        path = '{dashboard_host}:{port}'.format(dashboard_host=dashboard_host, port=start_result.info.port)
         return {
             'model_id': model_id,
             'path': path,
