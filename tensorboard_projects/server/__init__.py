@@ -7,7 +7,7 @@ from flask import Flask, request, send_from_directory, Response, make_response, 
 from flask_cors import CORS
 
 from tensorboard_projects.utils.process import exec_cmd
-import tensorboard_projects.server.handlers as handlers
+from tensorboard_projects.server import handlers
 
 logging.basicConfig()
 logger = logging.getLogger(__name__)

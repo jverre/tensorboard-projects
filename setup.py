@@ -25,9 +25,13 @@ js_files = package_files("tensorboard_projects/server/js/build")
 
 setup(
     name="tensorboard-projects",
+    description="Tensorboard Projects: A management UI for Tensorboard runs",
     long_description=long_description,
     long_description_content_type='text/markdown',
     version=version,
+    url='https://github.com/jverre/tensorboard-projects',
+    author='Jacques Verré',
+    license='MIT',
     packages=find_packages(),
     package_data={"tensorboard_projects": js_files},
     install_requires=[
@@ -41,6 +45,5 @@ setup(
     [console_scripts]
     tensorboard-projects=tensorboard_projects.cli:cli
     """,
-    description="Tensorboard Projects: A management UI for Tensorboard dashboards",
     python_requires=">=2.7,!= 3.0.*,!= 3.1.*,!= 3.2.*,!= 3.3.*,!= 3.4.*,!= 3.5.*"
 )
