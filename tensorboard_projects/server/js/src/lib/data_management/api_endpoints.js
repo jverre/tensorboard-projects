@@ -4,7 +4,6 @@ import queryString from 'qs';
 export const API_MODELS = "API_MODELS";
 export const API_MODEL = "API_MODEL";
 export const API_RUNS = "API_RUNS";
-export const API_DOCUMENTATION = "API_DOCUMENTATION";
 export const API_DASHBOARD = "API_DASHBOARD";
 
 
@@ -37,9 +36,6 @@ export const API_CONSTANT_MAP = {
     },
     API_RUNS: {
         "url": (params) => (`/api/model/${params.modelId}/runs`)
-    },
-    API_DOCUMENTATION : {
-        "url": (params) => (`/api/model/${params.modelId}/documentation`)
     },
     API_DASHBOARD : {
         "url": (params) => (`/api/dashboards`)

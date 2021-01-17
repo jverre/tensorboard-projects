@@ -1,7 +1,7 @@
 import React from 'react';
 import { Layout, Menu } from 'antd';
 import './PageContainerHOC.scss';
-  import { LineChartOutlined, FileSearchOutlined } from '@ant-design/icons';
+  import { LineChartOutlined } from '@ant-design/icons';
 import { redirect, sectionForRoute } from '../../lib/util/navigation';
 
 const { Content, Sider } = Layout;
@@ -16,10 +16,6 @@ export function PageContainerHOC(WrappedComponent) {
             this.setState({ collapsed });
         };
         
-        onClickDocumentation = () => {
-            redirect('/documentation')
-        }
-
         onClickDashboards = () => {
             redirect('/dashboards')
         }
@@ -33,12 +29,10 @@ export function PageContainerHOC(WrappedComponent) {
             const section = sectionForRoute(this.props.location.pathname);
 
             let selected_key = [];
-            if (section === 'documentation') {
+            if (section === 'runs') {
                 selected_key = ['1'];
-            } else if (section === 'runs') {
-                selected_key = ['2'];
             } else if (section ==='dashboards') {
-                selected_key = ['3'];
+                selected_key = ['2'];
             }
             
             return (
@@ -57,12 +51,9 @@ export function PageContainerHOC(WrappedComponent) {
                     >
                     <div className="logo" />
                     <Menu theme="dark" mode="inline" selectedKeys={selected_key} defaultSelectedKeys={['1']}>
-                        <Menu.Item key="1" icon={<FileSearchOutlined />} onClick={this.onClickDocumentation}>
-                            Documentation
-                        </Menu.Item>
-                        <Menu.Item key="2" icon={<LineChartOutlined />} onClick={this.onClickRuns}>
+                        <Menu.Item key="1" icon={<LineChartOutlined />} onClick={this.onClickRuns}>
                             Model Runs
-                        </Menu.Item><Menu.Item key="3" icon={<LineChartOutlined />} onClick={this.onClickDashboards}>
+                        </Menu.Item><Menu.Item key="2" icon={<LineChartOutlined />} onClick={this.onClickDashboards}>
                             Dashboards
                         </Menu.Item>
                     </Menu>

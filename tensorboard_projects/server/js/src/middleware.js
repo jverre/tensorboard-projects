@@ -1,11 +1,9 @@
 import Models from './modules/models/middleware';
-import Documentation from './modules/documentation/middleware';
 import Runs from './modules/runs/middleware';
 import Tensorboard from './modules/dashboards/middleware';
 
 const middlewares = {
   ...Models,
-  ...Documentation,
   ...Runs,
   ...Tensorboard,
 };

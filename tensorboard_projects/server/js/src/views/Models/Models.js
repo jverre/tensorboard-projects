@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Breadcrumb, Card } from 'antd';
-import { EditOutlined, LineChartOutlined, FileSearchOutlined } from '@ant-design/icons';
+import { EditOutlined, LineChartOutlined } from '@ant-design/icons';
 import { connect } from "react-redux";
 import { redirect } from '../../lib/util/navigation';
 import * as actions from './../../modules/models/actions'
@@ -34,10 +34,6 @@ class Models extends Component {
 
   onClickExperiments = (model_id) => {
     redirect(`/runs/${model_id}`);
-  }
-
-  onClickDocumentation = (model_id) => {
-    redirect(`/documentation/${model_id}`);
   }
 
   handleOk = () => {
@@ -87,12 +83,7 @@ class Models extends Component {
                 const model_id = project.model_id;
 
                 let actions = [];
-                if (pathname === 'documentation') {
-                  actions = [
-                    <div onClick={() => this.onClickDocumentation(model_id)}><FileSearchOutlined key='documentation'/> View documentation</div>,
-                    <EditOutlined key="edit" onClick={() => this.onClickEdit(project.model_id)}/>,
-                  ]
-                } else if (pathname === 'runs') {
+                if (pathname === 'runs') {
                   actions = [
                     <div onClick={() => this.onClickExperiments(model_id)}><LineChartOutlined key="dashboard"/> View runs</div>,
                     <EditOutlined key="edit" onClick={() => this.onClickEdit(project.model_id)}/>,

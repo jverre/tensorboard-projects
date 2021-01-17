@@ -1,6 +1,5 @@
 import {applyMiddleware, combineReducers, compose, createStore} from "redux";
 import models from './modules/models/reducers';
-import documentation from './modules/documentation/reducers';
 import runs from './modules/runs/reducers';
 import dashboards from './modules/dashboards/reducers';
 import {getReduxLogger} from './lib/util/config';
@@ -16,7 +15,6 @@ const customMiddleWare = store => next => action => {
 // Combine Reducers
 let reducers = combineReducers({
     models,
-    documentation,
     runs,
     dashboards
 });
