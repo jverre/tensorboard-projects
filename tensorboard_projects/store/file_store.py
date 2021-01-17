@@ -99,9 +99,10 @@ class FileStore():
                 if os.path.exists(root_path):
                     for model_version in os.listdir(root_path):
                         version_path = path.format(model_version=model_version)
-                        model_runs += self._get_runs_tensorboard(version_path,
-                                                                 model_name=model_name,
-                                                                 model_version=model_version)
+                        if os.path.isdir(version_path):
+                            model_runs += self._get_runs_tensorboard(version_path,
+                                                                     model_name=model_name,
+                                                                     model_version=model_version)
             else:
                 root_path = path
                 if os.path.exists(path):
