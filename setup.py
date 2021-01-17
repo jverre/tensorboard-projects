@@ -7,6 +7,11 @@ version = (
                      os.path.join("tensorboard_projects", "version.py")).load_module().__version__
 )
 
+# read the contents of your README file
+this_directory = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(this_directory, 'README.md'), encoding='utf-8') as f:
+    long_description = f.read()
+
 
 def package_files(directory):
     paths = []
@@ -20,6 +25,8 @@ js_files = package_files("tensorboard_projects/server/js/build")
 
 setup(
     name="tensorboard-projects",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
     version=version,
     packages=find_packages(),
     package_data={"tensorboard_projects": js_files},
@@ -34,6 +41,6 @@ setup(
     [console_scripts]
     tensorboard-projects=tensorboard_projects.cli:cli
     """,
-    description="Tensorboard Projects: A multi project UI for Tensorboard",
-    python_requires=">=2.7,!= 3.0.*,!= 3.1.*,!= 3.2.*,!= 3.3.*,!= 3.4.*,!= 3.5.*,!= 3.6.*"
+    description="Tensorboard Projects: A management UI for Tensorboard dashboards",
+    python_requires=">=2.7,!= 3.0.*,!= 3.1.*,!= 3.2.*,!= 3.3.*,!= 3.4.*,!= 3.5.*"
 )
