@@ -41,16 +41,8 @@ class FileStore():
             with open(model_metadata_path, 'w') as f:
                 json.dump(model_metadata, f)
 
-            model_summary_path = os.path.join(self.root_directory,
-                                              'models/{model_id}/documentation_summary.json'.format(model_id=model_id))
-            model_panes_path = os.path.join(self.root_directory,
-                                            'models/{model_id}/documentation_panes.json'.format(model_id=model_id))
             custom_runs_path = os.path.join(self.root_directory,
                                             'models/{model_id}/custom_runs.json'.format(model_id=model_id))
-            with open(model_summary_path, 'w') as f:
-                json.dump("", f)
-            with open(model_panes_path, 'w') as f:
-                json.dump([], f)
             with open(custom_runs_path, 'w') as f:
                 json.dump([], f)
 
@@ -190,40 +182,3 @@ class FileStore():
             model_metadata = json.load(f)
 
         return model_metadata
-
-    def get_model_documentation(self, model_id):
-        documentation_summary_path = os.path.join(self.root_directory,
-                                                  'models/{model_id}/documentation_summary.json'.format(model_id=model_id))
-        documentation_panes_path = os.path.join(self.root_directory,
-                                                'models/{model_id}/documentation_panes.json'.format(model_id=model_id))
-        documentation_metadata = os.path.join(self.root_directory,
-                                              'models/{model_id}/metadata.json'.format(model_id=model_id))
-        with open(documentation_summary_path, 'r') as f:
-            documentation_summary = json.load(f)
-        with open(documentation_panes_path, 'r') as f:
-            documentation_panes = json.load(f)
-        with open(documentation_metadata, 'r') as f:
-            documentation_metadata = json.load(f)
-
-        model_documentation = {
-                'documentation_summary': documentation_summary,
-                'documentation_panes': documentation_panes,
-                'documentation_metadata': documentation_metadata
-        }
-
-        return model_documentation
-
-    def update_documentation(self, model_id, documentation):
-        documentation_summary = documentation['documentation_summary']
-        documentation_panes = documentation['documentation_panes']
-
-        documentation_summary_path = os.path.join(self.root_directory,
-                                                  'models/{model_id}/documentation_summary.json'.format(model_id=model_id))
-        documentation_panes_path = os.path.join(self.root_directory,
-                                                'models/{model_id}/documentation_panes.json'.format(model_id=model_id))
-
-        with open(documentation_summary_path, 'w') as f:
-            json.dump(documentation_summary, f)
-        with open(documentation_panes_path, 'w') as f:
-            json.dump(documentation_panes, f)
-        return documentation

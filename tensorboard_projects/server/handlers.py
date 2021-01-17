@@ -63,18 +63,6 @@ def delete_model(model_id):
     return store.delete_model(model_id)
 
 
-def get_documentation(model_id):
-    store = _get_store()
-
-    return store.get_model_documentation(model_id)
-
-
-def update_documentation(model_id, documentation):
-    store = _get_store()
-
-    return store.update_documentation(model_id, documentation)
-
-
 def start_tensorboard_dashboard(model_id, runs):
     from tensorboard_projects.server import BACKEND_STORE_URI_ENV_VAR
 

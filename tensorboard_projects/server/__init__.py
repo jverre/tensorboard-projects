@@ -95,22 +95,6 @@ def edit_runs(model_id):
         return response
 
 
-@app.route(_add_static_prefix("/api/model/<model_id>/documentation"), methods=['GET'])
-def get_documentation(model_id):
-    logger.info('API call: GET /api/model/<model_id>/documentatin - GET model documentation')
-    documentation = handlers.get_documentation(model_id)
-    return make_response(jsonify(documentation))
-
-
-@app.route(_add_static_prefix("/api/model/<model_id>/documentation"), methods=['POST'])
-def update_documentation(model_id):
-    logger.info('API call: POST /api/model/<model_id>/documentation - Update model documentation')
-    documentation = request.get_json()
-    handlers.update_documentation(model_id=model_id,
-                                  documentation=documentation)
-    return make_response(jsonify(documentation))
-
-
 @app.route(_add_static_prefix("/api/dashboards"), methods=['GET'])
 def get_dashboards():
     logger.info('API call: GET /api/dashboards - Update active dashboards')

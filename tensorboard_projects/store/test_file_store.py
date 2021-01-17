@@ -142,38 +142,6 @@ class TestFileStore(unittest.TestCase):
         for run in updated_runs:
             self.assertEqual(run['archived'], False, msg='Run was not unarchived')
 
-    def testDocumentationUpdate(self):
-        fileStore = self.get_store()
-
-        # Create new model
-        model_id = 'model_1_documentation'
-        model_metadata = {
-            'model_id': model_id,
-            'model_name': 'Model 1',
-            'path': os.path.join(TestFileStore.ROOT_LOCATION, 'runs/{model_version}/logs'),
-            'description': 'Model description string'
-        }
-        fileStore.create_or_update_model(model_id, model_metadata)
-
-        # Get model documentation
-        documentation = fileStore.get_model_documentation(model_id)
-
-        self.assertEqual(documentation['documentation_summary'], '', msg='Documentation summary was not correctly initialized')
-        self.assertEqual(documentation['documentation_panes'], [], msg='Documentation panes was not correctly initialized')
-
-        # Update documentation
-        new_documentation_summary = {
-            'documentation_summary': 'This is the new model summary',
-            'documentation_panes': [{'title': 'This is a new tab', 'content': 'This is the new content', 'key': 1}]
-        }
-        fileStore.update_documentation(model_id, new_documentation_summary)
-
-        documentation = fileStore.get_model_documentation(model_id)
-        self.assertEqual(documentation['documentation_summary'], new_documentation_summary['documentation_summary'],
-                         msg='Documentation summary was not correctly updated')
-        self.assertEqual(documentation['documentation_panes'], new_documentation_summary['documentation_panes'],
-                         msg='Documentation panes was not correctly updated')
-
     def testEditRuns(self):
         fileStore = self.get_store()
 
