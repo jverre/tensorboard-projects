@@ -44,5 +44,11 @@ Tensorboard Projects can be installed from PyPI using `pip install tensorboard-p
 
 Once Tensorboard Projects is installed, you can start the UI using:
 ```
-tensorboard-projects ui --port 5000 --host 0.0.0.0
+tensorboard-projects ui
 ```
+
+In order to assist with running this on a remote machine, the following arguments are supported:
+* `--backend-store-uri`: Storage location of metadata, defaults to `~/.tensorboard_projects`
+* `--host`: Host for the API
+* `--port`: Port to run UI on
+* `--proxy_host`: UI will send requests to this endpoint, useful when tensorboard-projects is running on a remote machien
