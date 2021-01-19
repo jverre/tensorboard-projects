@@ -49,6 +49,6 @@ tensorboard-projects ui
 
 In order to assist with running this on a remote machine, the following arguments are supported:
 * `--backend-store-uri`: Storage location of metadata, defaults to `~/.tensorboard_projects`
-* `--host`: Host for the API
+* `--ip`: Host for the API, use 0.0.0.0 to access from a remote machine
 * `--port`: Port to run UI on
-* `--proxy_host`: UI will send requests to this endpoint, useful when tensorboard-projects is running on a remote machien
+remote machien
