@@ -106,7 +106,7 @@ class Dashboard extends Component {
         } else {
             return (
                 <div className="dashboard-page">
-                    {this.state.loadedDashboard == false ? 
+                    {this.state.loadedDashboard === false ? 
                         <div className='dashboard-loading-spinner'>
                             <Spin size="large" />
                         </div> : null}
