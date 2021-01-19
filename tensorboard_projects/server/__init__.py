@@ -1,7 +1,9 @@
 import os
+import sys
 import shlex
 import socket
 import textwrap
+import json
 import logging
 
 from flask import Flask, request, send_from_directory, Response, make_response, jsonify
@@ -153,7 +155,7 @@ def _build_gunicorn_command(gunicorn_opts, bind_address, workers):
     return ["gunicorn"] + opts + ["-b", bind_address, "-w", "%s" % workers, "tensorboard_projects.server:app"]
 
 
-def _get_ip(ip, port):
+def _get_ip(ip, port=None):
     if ip in ('', '0.0.0.0'):
         ip = socket.gethostname()
 
@@ -181,11 +183,10 @@ def run_server(
     env_map = {}
     if file_store_path:
         env_map[BACKEND_STORE_URI_ENV_VAR] = file_store_path
+    env_map[IP_ENV_VAR] = _get_ip(ip)
 
     ip = _get_ip(ip, port=port)
-
     host_url = _get_url(ip)
-    env_map[IP_ENV_VAR] = host_url
 
     print('host_url', host_url)
     # ToDo: Fix this

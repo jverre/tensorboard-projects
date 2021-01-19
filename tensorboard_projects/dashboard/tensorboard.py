@@ -2,10 +2,14 @@ import os
 import uuid
 import time
 import signal
+import logging
 
 from tensorboard.compat.tensorflow_stub.io import gfile
 from tensorboard import manager
 from tensorboard_projects import server
+
+
+logger = logging.getLogger(__name__)
 
 
 class TensorBoardDashboard():
@@ -35,27 +39,37 @@ class TensorBoardDashboard():
 
     def start(self, model_id):
         self._create_symlink_dir()
-        proxy_host = os.environ[server.PROXY_URI_ENV_VAR]
+        ip = os.environ[server.IP_ENV_VAR]
 
         parsed_args = ["--logdir", self.dest_path,
                        "--reload_multifile", "true",
                        "--bind_all"]
         start_result = manager.start(parsed_args)
-        
-        split_proxy_host = proxy_host.split(':')
-        if split_proxy_host[-1].isnumeric():
-            dashboard_host = ':'.join(split_proxy_host[:-1])
+
+        if isinstance(start_result, manager.StartLaunched):
+            path = 'http://{ip}:{port}'.format(ip=ip, port=start_result.info.port)
+
+            return {
+                'model_id': model_id,
+                'path': path,
+                'port': start_result.info.port,
+                'dashboard_id': self.dashboard_ID,
+                'created_at': time.time(),
+                'pid': start_result.info.pid}
         else:
-            dashboard_host = proxy_host
-    
-        path = '{dashboard_host}:{port}'.format(dashboard_host=dashboard_host, port=start_result.info.port)
-        return {
-            'model_id': model_id,
-            'path': path,
-            'port': start_result.info.port,
-            'dashboard_id': self.dashboard_ID,
-            'created_at': time.time(),
-            'pid': start_result.info.pid}
+            message = (
+                "ERROR: Failed to launch TensorBoard (exited with %d).%s"
+                % (
+                    start_result.exit_code, start_result.stderr
+                )
+            )
+            logger.error('Failed to start Tensorboard: \n {}'.format(message))
+
+            return {
+                'model_id': model_id,
+                'dashboard_id': self.dashboard_ID,
+                'created_at': time.time(),
+                'error': message}
 
 
 def stop_dashboard(dashboard_metadata):
