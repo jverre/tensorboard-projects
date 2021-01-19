@@ -1,5 +1,6 @@
 import os
 import shlex
+import socket
 import textwrap
 import logging
 
@@ -21,7 +22,7 @@ STATIC_DIR = os.path.join(app.root_path, REL_STATIC_DIR)
 
 STATIC_PREFIX_ENV_VAR = "_TENSORBOARD_PROJECTS_STATIC_PREFIX"
 BACKEND_STORE_URI_ENV_VAR = "_TENSORBOARD_PROJECTS_SERVER_FILE_STORE"
-PROXY_URI_ENV_VAR = "REACT_APP_TENSORBOARD_PROJECTS_PROXY"
+IP_ENV_VAR = "_TENSORBOARD_PROJECTS_IP"
 
 
 def _add_static_prefix(route):
@@ -111,8 +112,8 @@ def start_dashboards():
     model_id = payload['model_id']
 
     dashboard_data = handlers.start_tensorboard_dashboard(model_id=model_id, runs=runs)
-
     response = make_response(jsonify(dashboard_data))
+
     return response
 
 
@@ -147,17 +148,29 @@ def serve(path):
     return Response(text, mimetype="text/plain")
 
 
-def _build_gunicorn_command(gunicorn_opts, host, port, workers):
-    bind_address = "%s:%s" % (host, port)
+def _build_gunicorn_command(gunicorn_opts, bind_address, workers):
     opts = shlex.split(gunicorn_opts) if gunicorn_opts else []
     return ["gunicorn"] + opts + ["-b", bind_address, "-w", "%s" % workers, "tensorboard_projects.server:app"]
 
 
-def _run_server(
+def _get_ip(ip, port):
+    if ip in ('', '0.0.0.0'):
+        ip = socket.gethostname()
+
+    if port:
+        return "{ip}:{port}".format(ip=ip, port=port)
+    else:
+        return ip
+
+
+def _get_url(ip):
+    return "http://{ip}".format(ip=ip)
+
+
+def run_server(
     file_store_path,
-    host,
+    ip,
     port,
-    proxy_host=None,
     workers=None,
     gunicorn_opts=None,
 ):
@@ -169,13 +182,18 @@ def _run_server(
     if file_store_path:
         env_map[BACKEND_STORE_URI_ENV_VAR] = file_store_path
 
-    if proxy_host:
-        env_map[PROXY_URI_ENV_VAR] = proxy_host
+    ip = _get_ip(ip, port=port)
 
+    host_url = _get_url(ip)
+    env_map[IP_ENV_VAR] = host_url
+
+    print('host_url', host_url)
     # ToDo: Fix this
     # In order for the proxy host to be used, we create a new env.js file in the STATIC_DIR folder
     with open(os.path.join(STATIC_DIR, 'env.js'), 'w') as f:
-        f.write("window.API_URL = '{proxy_host}';".format(proxy_host=proxy_host))
+        f.write("window.API_URL = '{host_url}';".format(host_url=host_url))
 
-    full_command = _build_gunicorn_command(gunicorn_opts, host, port, workers or 4)
+    full_command = _build_gunicorn_command(gunicorn_opts,
+                                           bind_address=ip,
+                                           workers=workers or 4)
     exec_cmd(full_command, env=env_map, stream_output=True)
